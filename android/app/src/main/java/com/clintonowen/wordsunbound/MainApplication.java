@@ -1,4 +1,4 @@
-package com.wordsunbound;
+package com.clintonowen.wordsunbound;
 
 import android.app.Application;
 
