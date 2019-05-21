@@ -22,9 +22,11 @@ export function loadWelcomeScreen () {
       rightButtonColor: '#2196F3'
     },
     statusBar: {
+      backgroundColor: '#766E8E',
       style: 'light'
     },
     layout: {
+      backgroundColor: '#766E8E',
       orientation: ['portrait']
     },
     bottomTabs: {
@@ -47,9 +49,8 @@ export function loadWelcomeScreen () {
             name: WELCOME_SCREEN,
             options: {
               topBar: {
-                title: {
-                  text: 'Welcome'
-                }
+                visible: false,
+                drawBehind: true
               }
             }
           }
