@@ -19,9 +19,7 @@ const navButton = props => {
     ]}>
       <Text style={[
         styles.text,
-        {
-          fontSize: props.style.fontSize
-        },
+        props.style ? { fontSize: props.style.fontSize } : null,
         props.disabled ? styles.disabledText : null
       ]}>
         {props.children}

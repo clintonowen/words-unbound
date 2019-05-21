@@ -1,3 +1,4 @@
+// import { Dimensions } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { WELCOME_SCREEN } from './Screens';
 import registerScreens from './registerScreens';
@@ -6,6 +7,8 @@ import registerScreens from './registerScreens';
 registerScreens();
 
 export function loadWelcomeScreen () {
+  // const screenWidth = Dimensions.get('window').width;
+
   Navigation.setDefaultOptions({
     topBar: {
       background: {
@@ -39,6 +42,74 @@ export function loadWelcomeScreen () {
       iconColor: 'gray',
       selectedIconColor: '#2196F3'
     }
+    // animations: {
+    //   push: {
+    //     enabled: true,
+    //     topBar: {
+    //       x: {
+    //         from: screenWidth,
+    //         to: 0,
+    //         duration: 300,
+    //         startDelay: 0,
+    //         interpolation: 'decelerate',
+    //         waitForRender: true
+    //       }
+    //     },
+    //     content: {
+    //       x: {
+    //         from: screenWidth,
+    //         to: 0,
+    //         duration: 300,
+    //         startDelay: 0,
+    //         interpolation: 'decelerate',
+    //         waitForRender: true
+    //       }
+    //     },
+    //     bottomTabs: {
+    //       x: {
+    //         from: screenWidth,
+    //         to: 0,
+    //         duration: 300,
+    //         startDelay: 0,
+    //         interpolation: 'decelerate',
+    //         waitForRender: true
+    //       }
+    //     }
+    //   },
+    //   pop: {
+    //     enabled: true,
+    //     topBar: {
+    //       x: {
+    //         from: 0,
+    //         to: screenWidth,
+    //         duration: 300,
+    //         startDelay: 0,
+    //         interpolation: 'decelerate',
+    //         waitForRender: true
+    //       }
+    //     },
+    //     content: {
+    //       x: {
+    //         from: 0,
+    //         to: screenWidth,
+    //         duration: 300,
+    //         startDelay: 0,
+    //         interpolation: 'decelerate',
+    //         waitForRender: true
+    //       }
+    //     },
+    //     bottomTabs: {
+    //       x: {
+    //         from: 0,
+    //         to: screenWidth,
+    //         duration: 300,
+    //         startDelay: 0,
+    //         interpolation: 'decelerate',
+    //         waitForRender: true
+    //       }
+    //     }
+    //   }
+    // }
   });
 
   Navigation.setRoot({

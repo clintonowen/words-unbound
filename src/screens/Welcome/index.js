@@ -8,13 +8,28 @@ import {
 import MainText from '../../components/UI/MainText';
 import NavButton from '../../components/UI/NavButton';
 
+import { Navigation } from 'react-native-navigation';
+import { WORDS_FORM_SCREEN } from '../../navigation/Screens';
+
 export class WelcomeScreen extends Component {
   constructor (props) {
     super(props);
     this.handleNewLevel = this.handleNewLevel.bind(this);
   }
 
-  handleNewLevel () {}
+  handleNewLevel () {
+    Navigation.push(this.props.componentId, {
+      component: {
+        name: WORDS_FORM_SCREEN,
+        options: {
+          topBar: {
+            visible: false,
+            drawBehind: true
+          }
+        }
+      }
+    });
+  }
 
   render () {
     return (
