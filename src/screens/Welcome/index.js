@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   Platform,
   Dimensions
 } from 'react-native';
+import MainText from '../../components/UI/MainText';
+import NavButton from '../../components/UI/NavButton';
 
 export class WelcomeScreen extends Component {
+  constructor (props) {
+    super(props);
+    this.handleNewLevel = this.handleNewLevel.bind(this);
+  }
+
+  handleNewLevel () {}
+
   render () {
     return (
       <View style={[
@@ -17,9 +25,9 @@ export class WelcomeScreen extends Component {
           : null
       ]
       }>
-        <Text style={styles.heading}>
+        <MainText style={styles.heading}>
           WORDS
-        </Text>
+        </MainText>
         <View style={styles.tileContainer}>
           <View style={[
             styles.tile,
@@ -28,7 +36,7 @@ export class WelcomeScreen extends Component {
               ? styles.iosShadow
               : styles.androidShadow
           ]}>
-            <Text style={styles.tileText}>U</Text>
+            <MainText style={styles.tileText}>U</MainText>
           </View>
           <View style={[
             styles.tile,
@@ -37,7 +45,7 @@ export class WelcomeScreen extends Component {
               ? styles.iosShadow
               : styles.androidShadow
           ]}>
-            <Text style={styles.tileText}>N</Text>
+            <MainText style={styles.tileText}>N</MainText>
           </View>
           <View style={[
             styles.tile,
@@ -46,7 +54,7 @@ export class WelcomeScreen extends Component {
               ? styles.iosShadow
               : styles.androidShadow
           ]}>
-            <Text style={styles.tileText}>B</Text>
+            <MainText style={styles.tileText}>B</MainText>
           </View>
           <View style={[
             styles.tile,
@@ -55,7 +63,7 @@ export class WelcomeScreen extends Component {
               ? styles.iosShadow
               : styles.androidShadow
           ]}>
-            <Text style={styles.tileText}>O</Text>
+            <MainText style={styles.tileText}>O</MainText>
           </View>
           <View style={[
             styles.tile,
@@ -64,7 +72,7 @@ export class WelcomeScreen extends Component {
               ? styles.iosShadow
               : styles.androidShadow
           ]}>
-            <Text style={styles.tileText}>U</Text>
+            <MainText style={styles.tileText}>U</MainText>
           </View>
           <View style={[
             styles.tile,
@@ -73,7 +81,7 @@ export class WelcomeScreen extends Component {
               ? styles.iosShadow
               : styles.androidShadow
           ]}>
-            <Text style={styles.tileText}>N</Text>
+            <MainText style={styles.tileText}>N</MainText>
           </View>
           <View style={[
             styles.tile,
@@ -82,9 +90,16 @@ export class WelcomeScreen extends Component {
               ? styles.iosShadow
               : styles.androidShadow
           ]}>
-            <Text style={styles.tileText}>D</Text>
+            <MainText style={styles.tileText}>D</MainText>
           </View>
         </View>
+        <NavButton
+          color='#00C183'
+          onPress={this.handleNewLevel}
+          style={styles.button}
+        >
+          New Level
+        </NavButton>
       </View>
     );
   }
@@ -95,18 +110,17 @@ const winWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    flex: 1
+    flex: 1,
+    justifyContent: 'center'
   },
   iosContainer: {
     marginTop: 20
   },
   heading: {
-    color: 'white',
     fontSize: winWidth / 4.5,
     fontWeight: 'bold',
     lineHeight: winWidth / 4.5,
     margin: 0,
-    marginTop: 40,
     textShadowColor: 'rgb(40, 40, 40)',
     textShadowOffset: {
       width: 2,
@@ -152,12 +166,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#00C183'
   },
   tileText: {
-    color: 'white',
     fontSize: (winWidth / (1.2 * 7)) - 4,
     fontWeight: 'bold',
     lineHeight: (winWidth / (1.2 * 7)) - 4,
     marginTop: winWidth / 100,
     textAlign: 'center'
+  },
+  button: {
+    borderWidth: 3,
+    fontSize: 40,
+    marginTop: 100,
+    paddingHorizontal: 20
   }
 });
 
