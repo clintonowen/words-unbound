@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, StyleSheet } from 'react-native';
 import MainText from '../../components/UI/MainText';
 import NavButton from '../../components/UI/NavButton';
@@ -72,4 +73,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ResultsScreen;
+const mapStateToProps = state => {
+  return {
+    // isLoading: state.places.isLoading
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResultsScreen);

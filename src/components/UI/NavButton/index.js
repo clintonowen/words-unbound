@@ -19,7 +19,9 @@ const navButton = props => {
     ]}>
       <Text style={[
         styles.text,
-        props.style ? { fontSize: props.style.fontSize } : null,
+        props.style && props.style.fontSize
+          ? { fontSize: props.style.fontSize }
+          : null,
         props.disabled ? styles.disabledText : null
       ]}>
         {props.children}
@@ -55,7 +57,10 @@ const styles = StyleSheet.create({
     margin: 8
   },
   disabledButton: {
-    backgroundColor: '#EEE'
+    backgroundColor: '#AAA',
+    borderColor: '#AAA',
+    elevation: 0,
+    shadowOpacity: 0
   },
   iosShadow: {
     shadowColor: 'rgb(40, 40, 40)',
@@ -71,11 +76,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold'
   },
   disabledText: {
-    color: '#AAA'
+    color: '#CCC'
   }
 });
 
