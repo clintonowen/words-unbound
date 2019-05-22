@@ -8,22 +8,14 @@ import {
   Platform
 } from 'react-native';
 
-const navButton = props => {
+const tileButton = props => {
   const content = (
     <View style={[
       styles.button,
       props.style,
-      { backgroundColor: props.color },
-      Platform.OS === 'ios' ? styles.iosShadow : styles.androidShadow,
-      props.disabled ? styles.disabledButton : null
+      Platform.OS === 'ios' ? styles.iosShadow : styles.androidShadow
     ]}>
-      <Text style={[
-        styles.text,
-        props.style && props.style.fontSize
-          ? { fontSize: props.style.fontSize }
-          : null,
-        props.disabled ? styles.disabledText : null
-      ]}>
+      <Text style={styles.text}>
         {props.children}
       </Text>
     </View>
@@ -49,18 +41,14 @@ const navButton = props => {
 
 const styles = StyleSheet.create({
   button: {
-    borderColor: 'white',
-    borderRadius: 30,
-    borderStyle: 'solid',
-    borderWidth: 2,
-    paddingHorizontal: 10,
-    margin: 8
-  },
-  disabledButton: {
-    backgroundColor: '#AAA',
-    borderColor: '#AAA',
-    elevation: 0,
-    shadowOpacity: 0
+    borderRadius: 4,
+    flexDirection: 'row',
+    height: 30,
+    justifyContent: 'center',
+    marginHorizontal: 3,
+    marginTop: 10,
+    padding: 0,
+    width: 30
   },
   iosShadow: {
     shadowColor: 'rgb(40, 40, 40)',
@@ -77,11 +65,11 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 30,
-    fontWeight: 'bold'
-  },
-  disabledText: {
-    color: '#CCC'
+    fontWeight: 'bold',
+    lineHeight: 30,
+    marginTop: 2.5,
+    textAlign: 'center'
   }
 });
 
-export default navButton;
+export default tileButton;
