@@ -1,3 +1,10 @@
+import loadLocalResource from 'react-native-local-resource';
+import dict3 from '../assets/dictionaries/3-letter.txt';
+import dict4 from '../assets/dictionaries/4-letter.txt';
+import dict5 from '../assets/dictionaries/5-letter.txt';
+import dict6 from '../assets/dictionaries/6-letter.txt';
+import dict7 from '../assets/dictionaries/7-letter.txt';
+
 export const makeId = () => {
   let text = '';
   const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -8,40 +15,33 @@ export const makeId = () => {
 };
 
 export const loadDictionary = (wordLength) => {
-  let path;
+  let dictResource;
 
   switch (wordLength) {
-    case 2:
-      path = '../assets/dictionaries/2-letter.txt';
-      break;
     case 3:
-      path = '../assets/dictionaries/3-letter.txt';
+      dictResource = dict3;
       break;
     case 4:
-      path = '../assets/dictionaries/4-letter.txt';
+      dictResource = dict4;
       break;
     case 5:
-      path = '../assets/dictionaries/5-letter.txt';
+      dictResource = dict5;
       break;
     case 6:
-      path = '../assets/dictionaries/6-letter.txt';
+      dictResource = dict6;
       break;
     case 7:
-      path = '../assets/dictionaries/7-letter.txt';
-      break;
-    case 8:
-      path = '../assets/dictionaries/8-letter.txt';
+      dictResource = dict7;
       break;
     default:
       break;
   }
 
   return new Promise((resolve, reject) => {
-    window.fetch(`${process.env.PUBLIC_URL}${path}`)
-      .then(response => response.text())
-      .then((data) => {
+    loadLocalResource(dictResource)
+      .then((text) => {
         let dictionary = [];
-        data.toString().split('\n').forEach(word => {
+        text.toString().split('\n').forEach(word => {
           dictionary.push(word);
         });
         resolve(dictionary);
