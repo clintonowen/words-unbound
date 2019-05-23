@@ -70,15 +70,24 @@ export class WordsFormScreen extends Component {
     let submitMessage = (
       <View style={styles.submitMessage} />
     );
-    let submitButton = (
-      <NavButton
-        style={styles.submitButton}
-        color='#00C183'
-        onPress={this.onSubmit}
-        disabled={!this.props.wordLength || !this.props.possLetters}
-      >
-        Submit
-      </NavButton>
+    let navButtons = (
+      <View style={styles.navContainer}>
+        <NavButton
+          style={styles.backButton}
+          color='#F96E88'
+          onPress={this.onNavBack}
+        >
+          Back
+        </NavButton>
+        <NavButton
+          style={styles.submitButton}
+          color='#00C183'
+          onPress={this.onSubmit}
+          disabled={!this.props.wordLength || !this.props.possLetters}
+        >
+          Submit
+        </NavButton>
+      </View>
     );
 
     for (let i = 3; i <= 7; i++) {
@@ -105,7 +114,11 @@ export class WordsFormScreen extends Component {
     }
 
     if (this.props.loading) {
-      submitButton = (<ActivityIndicator />);
+      navButtons = (
+        <View style={styles.navContainer}>
+          <ActivityIndicator />
+        </View>
+      );
     }
 
     return (
@@ -127,16 +140,7 @@ export class WordsFormScreen extends Component {
           autoCapitalize='characters'
           underlineColorAndroid='transparent'
         />
-        <View style={styles.navContainer}>
-          <NavButton
-            style={styles.backButton}
-            color='#F96E88'
-            onPress={this.onNavBack}
-          >
-            Back
-          </NavButton>
-          {submitButton}
-        </View>
+        {navButtons}
         {submitMessage}
       </View>
     );
@@ -171,7 +175,9 @@ const styles = StyleSheet.create({
   },
   navContainer: {
     flexDirection: 'row',
-    marginTop: 20
+    alignItems: 'center',
+    height: 60,
+    marginTop: 10
   },
   backButton: {
     marginRight: 20
