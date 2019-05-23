@@ -79,33 +79,45 @@ export class ResultsScreen extends Component {
     } else if (this.props.words && this.props.words.length > 0) {
       results = (
         <FlatList
+          style={styles.flatListContainer}
+          contentContainerStyle={styles.listContainer}
           data={this.props.words}
           keyExtractor={() => makeId()}
           renderItem={word => {
             return (
               <TouchableOpacity
+                style={[
+                  styles.listItem,
+                  Platform.OS === 'ios'
+                    ? styles.iosShadow
+                    : styles.androidShadow
+                ]}
                 onPress={() => this.handleSelectEditing(word.item)}
               >
-                <MainText>
+                <MainText style={styles.listItemText}>
                   {word.item}
                 </MainText>
               </TouchableOpacity>
             );
           }}
-          style={styles.listContainer}
         />
       );
 
       const plural = this.props.words.length !== 1 ? 's' : null;
       count = (
         <React.Fragment>
-          <MainText>
-            {this.props.words.length} possible solution{plural}
+          <MainText style={styles.text}>
+            <MainText style={{ color: '#FFA141' }}>
+              {this.props.words.length}
+            </MainText>
+            <MainText>
+              &nbsp;possible solution{plural}
+            </MainText>
           </MainText>
-          <MainText>
+          <MainText style={styles.text}>
             Select a word:
           </MainText>
-          <MainText>
+          <MainText style={styles.subText}>
             Note: Results are sorted by the number of unique letters in each word, so words near the top are better for narrowing down the solution.
           </MainText>
         </React.Fragment>
@@ -171,17 +183,45 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: Platform.OS === 'ios' ? 20 : 0
   },
+  flatListContainer: {
+    width: '100%'
+  },
   listContainer: {
-    // width: '100%'
+    alignItems: 'center',
+    backgroundColor: '#5F5B71',
+    padding: 8,
+    width: '100%'
   },
   listItem: {
-    // width: '100%'
+    backgroundColor: '#58BBC9',
+    borderColor: 'white',
+    borderRadius: 4,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginBottom: 8,
+    width: '75%'
+  },
+  listItemText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
   editingContainer: {
     flexDirection: 'row'
   },
   editingLetter: {
     // flex: 1
+  },
+  text: {
+    fontSize: 24,
+    marginBottom: 2
+  },
+  subText: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    marginBottom: 8
   },
   iosShadow: {
     shadowColor: 'rgb(40, 40, 40)',
