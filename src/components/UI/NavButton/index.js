@@ -14,6 +14,7 @@ const navButton = props => {
       styles.button,
       props.style,
       { backgroundColor: props.color },
+      Platform.OS === 'ios' ? styles.iosShadow : styles.androidShadow,
       props.disabled ? styles.disabledButton : null
     ]}>
       <Text style={[
@@ -32,20 +33,14 @@ const navButton = props => {
     return content;
   } else if (Platform.OS === 'android') {
     return (
-      <TouchableNativeFeedback
-        style={styles.androidShadow}
-        onPress={props.onPress}
-      >
+      <TouchableNativeFeedback onPress={props.onPress}>
         {content}
       </TouchableNativeFeedback>
     );
   } else {
     // Platform.OS === 'ios'
     return (
-      <TouchableOpacity
-        style={styles.iosShadow}
-        onPress={props.onPress}
-      >
+      <TouchableOpacity onPress={props.onPress}>
         {content}
       </TouchableOpacity>
     );

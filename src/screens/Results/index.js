@@ -13,6 +13,7 @@ import TileButton from '../../components/UI/TileButton';
 import { Navigation } from 'react-native-navigation';
 import { fetchWords, clearWords } from '../../store/actions';
 import { makeId } from '../../utils/utils';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export class ResultsScreen extends Component {
   constructor (props) {
@@ -20,7 +21,8 @@ export class ResultsScreen extends Component {
     this.state = {
       editingWord: null,
       selectedWords: [],
-      startingIndex: 0
+      startingIndex: 0,
+      foundWord: false
     };
 
     this.onNavBack = this.onNavBack.bind(this);
@@ -54,10 +56,57 @@ export class ResultsScreen extends Component {
     });
   }
 
+  handleCycleColor (currentColor, letterIndex) {
+    let color;
+    switch (currentColor) {
+      case 'Blue':
+        color = 'Orange';
+        break;
+      case 'Orange':
+        color = 'Green';
+        break;
+      default:
+        color = 'Blue';
+    }
+    // Set new letter color
+    const letter = Object.assign({}, this.state.editingWord[letterIndex], {
+      color
+    });
+    // Reinsert letter into `editingWord`
+    const editingWord = (letterIndex > 0)
+      ? this.state.editingWord.slice(0, letterIndex).concat(letter).concat(this.state.editingWord.slice(letterIndex + 1))
+      : [letter].concat(this.state.editingWord.slice(1));
+    // Assign updated `editingWord` to state
+    this.setState({
+      editingWord
+    });
+  }
+
   render () {
+    let navButton;
     let results;
     let count;
-    let editing;
+    let editingContent;
+
+    if (!this.state.foundWord) {
+      navButton = (
+        <NavButton
+          color='#F96E88'
+          onPress={this.onNavBack}
+        >
+          Back
+        </NavButton>
+      );
+    } else {
+      navButton = (
+        <NavButton
+          color='#00C183'
+          onPress={this.onRestart}
+        >
+          Start Over
+        </NavButton>
+      );
+    }
 
     if (this.props.loading) {
       results = (
@@ -67,14 +116,20 @@ export class ResultsScreen extends Component {
       );
     } else if (this.state.editingWord) {
       results = (
-        <React.Fragment>
-          <MainText>
+        <View style={styles.editingInstructions}>
+          <MainText style={[
+            styles.subText,
+            styles.leftText
+          ]}>
             1. Click the letters in the word above to set their color.
           </MainText>
-          <MainText>
+          <MainText style={[
+            styles.subText,
+            styles.leftText
+          ]}>
             2. Click the plus sign to add the word to your list of guesses.
           </MainText>
-        </React.Fragment>
+        </View>
       );
     } else if (this.props.words && this.props.words.length > 0) {
       results = (
@@ -103,30 +158,42 @@ export class ResultsScreen extends Component {
         />
       );
 
-      const plural = this.props.words.length !== 1 ? 's' : null;
+      const plural = this.props.words.length > 1 ? 's' : null;
       count = (
         <React.Fragment>
           <MainText style={styles.text}>
             <MainText style={{ color: '#FFA141' }}>
               {this.props.words.length}
             </MainText>
-            <MainText>
-              &nbsp;possible solution{plural}
+            &nbsp;possible solution{plural}
+          </MainText>
+          <MainText style={styles.subText}>
+            <MainText style={styles.boldText}>
+              Note:
             </MainText>
+            &nbsp;Results are sorted by the number of unique letters in each word, so words near the top are better for narrowing down the solution.
           </MainText>
           <MainText style={styles.text}>
             Select a word:
-          </MainText>
-          <MainText style={styles.subText}>
-            Note: Results are sorted by the number of unique letters in each word, so words near the top are better for narrowing down the solution.
           </MainText>
         </React.Fragment>
       );
     } else {
       results = (
-        <MainText>
-          Uh oh! No words found!
-        </MainText>
+        <React.Fragment>
+          <MainText style={[
+            styles.text,
+            styles.centeredText
+          ]}>
+            Uh oh! No words found!
+          </MainText>
+          <MainText style={[
+            styles.text,
+            styles.centeredText
+          ]}>
+            Make sure everything is correct and try again.
+          </MainText>
+        </React.Fragment>
       );
     }
 
@@ -146,30 +213,43 @@ export class ResultsScreen extends Component {
         );
       });
 
-      editing = (
+      editingContent = (
         <View style={styles.editingContainer}>
           {editingButtons}
+          <View style={styles.editingButtons}>
+            <TouchableOpacity onPress={this.handleEditAdd}>
+              <View style={styles.addButton}>
+                <Icon
+                  name={Platform.OS === 'android'
+                    ? 'md-add-circle'
+                    : 'ios-add-circle'}
+                  size={20}
+                  color='#00C183'
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.handleEditRemove}>
+              <View style={styles.removeButton}>
+                <Icon
+                  name={Platform.OS === 'android'
+                    ? 'md-remove-circle'
+                    : 'ios-remove-circle'}
+                  size={20}
+                  color='red'
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       );
     }
 
     return (
       <View style={styles.container}>
-        <NavButton
-          color='#F96E88'
-          onPress={this.onNavBack}
-        >
-          Back
-        </NavButton>
-        {editing}
+        {navButton}
+        {editingContent}
         {count}
         {results}
-        <NavButton
-          color='#00C183'
-          onPress={this.onRestart}
-        >
-          Start Over
-        </NavButton>
       </View>
     );
   }
@@ -179,16 +259,17 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     marginHorizontal: 20,
+    marginBottom: 20,
     marginTop: Platform.OS === 'ios' ? 20 : 0
   },
   flatListContainer: {
+    backgroundColor: '#5F5B71',
     width: '100%'
   },
   listContainer: {
     alignItems: 'center',
-    backgroundColor: '#5F5B71',
     padding: 8,
     width: '100%'
   },
@@ -209,19 +290,44 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   editingContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8
   },
   editingLetter: {
+
+  },
+  editingButtons: {
+    flex: 1,
+    marginLeft: 4
+  },
+  addButton: {
     // flex: 1
+  },
+  removeButton: {
+    // flex: 1
+  },
+  editingInstructions: {
+    width: '100%'
   },
   text: {
     fontSize: 24,
-    marginBottom: 2
+    marginBottom: 4
   },
   subText: {
     fontSize: 14,
     fontStyle: 'italic',
-    marginBottom: 8
+    marginBottom: 4
+  },
+  boldText: {
+    fontWeight: 'bold'
+  },
+  centeredText: {
+    marginVertical: 8,
+    textAlign: 'center'
+  },
+  leftText: {
+    textAlign: 'left'
   },
   iosShadow: {
     shadowColor: 'rgb(40, 40, 40)',
