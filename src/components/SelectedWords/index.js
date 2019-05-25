@@ -13,6 +13,7 @@ const selectedWords = props => {
   let selected = props.selectedWords.map((wordArray, wordIndex) => {
     let found = true;
     let remove = null;
+    let lastWord = false;
 
     const letters = wordArray.map((letter, letterIndex) => {
       if (letter.color !== 'Green') {
@@ -39,6 +40,7 @@ const selectedWords = props => {
     }
 
     if (wordIndex === props.selectedWords.length - 1) {
+      lastWord = true;
       remove = (
         <TouchableOpacity onPress={props.onRemoveSelected}>
           <View style={styles.removeButton}>
@@ -55,7 +57,13 @@ const selectedWords = props => {
     }
 
     return (
-      <View style={styles.container} key={makeId()}>
+      <View
+        style={[
+          styles.selectedContainer,
+          !lastWord ? styles.notLast : null
+        ]}
+        key={makeId()}
+      >
         <View style={styles.lettersContainer}>
           {letters}
         </View>
@@ -64,16 +72,28 @@ const selectedWords = props => {
     );
   });
 
-  return selected;
+  return (
+    <View style={styles.container}>
+      {selected}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
+    marginBottom: 10,
+    width: '100%'
+  },
+  selectedContainer: {
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 8,
+    marginBottom: -3,
     width: '100%'
+  },
+  notLast: {
+    marginRight: 33
   },
   lettersContainer: {
     backgroundColor: '#1F5760',

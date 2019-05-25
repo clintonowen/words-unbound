@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 8,
+    marginVertical: 8,
     width: '100%'
   },
   editingLetterContainer: {
