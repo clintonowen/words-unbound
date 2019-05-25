@@ -6,8 +6,10 @@ import {
   StyleSheet
 } from 'react-native';
 import ResultsList from '../../components/ResultsList';
+import SelectedWords from '../../components/SelectedWords';
 import EditingWord from '../../components/EditingWord';
 import NavButton from '../../components/UI/NavButton';
+import MainText from '../../components/UI/MainText';
 import { Navigation } from 'react-native-navigation';
 import { fetchWords, clearWords } from '../../store/actions';
 
@@ -22,8 +24,10 @@ export class ResultsScreen extends Component {
 
     this.onNavBack = this.onNavBack.bind(this);
     this.onRestart = this.onRestart.bind(this);
-    this.handleEditAdd = this.handleEditAdd.bind(this);
-    this.handleEditRemove = this.handleEditRemove.bind(this);
+    this.handleWordFound = this.handleWordFound.bind(this);
+    this.handleRemoveSelected = this.handleRemoveSelected.bind(this);
+    this.handleAddEdit = this.handleAddEdit.bind(this);
+    this.handleRemoveEdit = this.handleRemoveEdit.bind(this);
   }
 
   onNavBack () {
@@ -32,6 +36,22 @@ export class ResultsScreen extends Component {
 
   onRestart () {
     Navigation.popToRoot(this.props.componentId);
+  }
+
+  handleWordFound () {
+    this.setState({
+      foundWord: true
+    });
+  }
+
+  handleRemoveSelected () {
+    let selectedWords = this.state.selectedWords.slice(0, -1);
+    this.setState({
+      editingWord: null,
+      selectedWords
+    });
+    // Fetch an updated list of words
+    this.props.onFetchWords(this.props.query, selectedWords);
   }
 
   handleSelectEditing (word) {
@@ -79,7 +99,7 @@ export class ResultsScreen extends Component {
     });
   }
 
-  handleEditAdd () {
+  handleAddEdit () {
     const selectedWords = [...this.state.selectedWords, this.state.editingWord];
     this.setState({
       editingWord: null,
@@ -89,7 +109,7 @@ export class ResultsScreen extends Component {
     this.props.onFetchWords(this.props.query, selectedWords);
   }
 
-  handleEditRemove () {
+  handleRemoveEdit () {
     this.setState({
       editingWord: null
     });
@@ -97,6 +117,7 @@ export class ResultsScreen extends Component {
 
   render () {
     let navButton;
+    let selectedWords;
     let results;
     let editingContent;
 
@@ -120,7 +141,28 @@ export class ResultsScreen extends Component {
       );
     }
 
-    if (!this.state.editingWord) {
+    if (this.state.selectedWords.length > 0) {
+      selectedWords = (
+        <SelectedWords
+          selectedWords={this.state.selectedWords}
+          onWordFound={this.handleWordFound}
+          onRemoveSelected={this.handleRemoveSelected}
+        />
+      );
+    }
+
+    if (this.state.foundWord) {
+      results = (
+        <React.Fragment>
+          <MainText>
+            CONGRATULATIONS!
+          </MainText>
+          <MainText>
+            You found the correct word!
+          </MainText>
+        </React.Fragment>
+      );
+    } else if (!this.state.editingWord) {
       results = (
         <ResultsList
           onResultPress={(word) => this.handleSelectEditing(word)}
@@ -131,8 +173,8 @@ export class ResultsScreen extends Component {
         <EditingWord
           editingWord={this.state.editingWord}
           onCycleColor={(color, index) => this.handleCycleColor(color, index)}
-          onEditAdd={this.handleEditAdd}
-          onEditRemove={this.handleEditRemove}
+          onEditAdd={this.handleAddEdit}
+          onEditRemove={this.handleRemoveEdit}
         />
       );
     }
@@ -140,6 +182,7 @@ export class ResultsScreen extends Component {
     return (
       <View style={styles.container}>
         {navButton}
+        {selectedWords}
         {editingContent}
         {results}
       </View>
