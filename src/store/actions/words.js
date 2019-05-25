@@ -112,7 +112,7 @@ export const fetchWords = (query, selectedWords) => dispatch => {
     });
   }
 
-  loadDictionary(wordLength)
+  return loadDictionary(wordLength)
     .then(dictionary => {
       dictionary.forEach(word => {
         if (hasOnlyPossLetters(word, possLetters) &&
@@ -129,10 +129,10 @@ export const fetchWords = (query, selectedWords) => dispatch => {
       return results;
     })
     .then(results => {
-      dispatch(fetchWordsSuccess(results));
+      return dispatch(fetchWordsSuccess(results));
     })
     .catch(err => {
       console.log(err);
-      dispatch(fetchWordsError(err));
+      return dispatch(fetchWordsError(err));
     });
 };

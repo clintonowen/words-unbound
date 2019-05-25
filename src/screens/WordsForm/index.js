@@ -31,22 +31,6 @@ export class WordsFormScreen extends Component {
     this.handleChangeText = this.handleChangeText.bind(this);
   }
 
-  componentDidUpdate (prevProps) {
-    if (prevProps.loading && !this.props.loading) {
-      Navigation.push(this.props.componentId, {
-        component: {
-          name: RESULTS_SCREEN,
-          options: {
-            topBar: {
-              visible: false,
-              drawBehind: true
-            }
-          }
-        }
-      });
-    }
-  }
-
   onNavBack () {
     Navigation.pop(this.props.componentId);
     this.props.onClearWords();
@@ -54,7 +38,20 @@ export class WordsFormScreen extends Component {
 
   onSubmit () {
     const { wordLength, possLetters } = this.props;
-    this.props.onFetchWords({ wordLength, possLetters });
+    this.props.onFetchWords({ wordLength, possLetters })
+      .then(() => {
+        Navigation.push(this.props.componentId, {
+          component: {
+            name: RESULTS_SCREEN,
+            options: {
+              topBar: {
+                visible: false,
+                drawBehind: true
+              }
+            }
+          }
+        });
+      });
   }
 
   handleLengthClick (wordLength) {

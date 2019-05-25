@@ -27,6 +27,8 @@ export class ResultsScreen extends Component {
 
     this.onNavBack = this.onNavBack.bind(this);
     this.onRestart = this.onRestart.bind(this);
+    this.handleEditAdd = this.handleEditAdd.bind(this);
+    this.handleEditRemove = this.handleEditRemove.bind(this);
   }
 
   onNavBack () {
@@ -79,6 +81,22 @@ export class ResultsScreen extends Component {
     // Assign updated `editingWord` to state
     this.setState({
       editingWord
+    });
+  }
+
+  handleEditAdd () {
+    const selectedWords = [...this.state.selectedWords, this.state.editingWord];
+    this.setState({
+      editingWord: null,
+      selectedWords
+    });
+    // Fetch an updated list of words
+    this.props.onFetchWords(this.props.query, selectedWords);
+  }
+
+  handleEditRemove () {
+    this.setState({
+      editingWord: null
     });
   }
 
@@ -198,7 +216,7 @@ export class ResultsScreen extends Component {
     }
 
     if (this.state.editingWord) {
-      const editingButtons = this.state.editingWord.map((letter, letterIndex) => {
+      const editingLetters = this.state.editingWord.map((letter, letterIndex) => {
         return (
           <TileButton
             key={makeId()}
@@ -215,7 +233,9 @@ export class ResultsScreen extends Component {
 
       editingContent = (
         <View style={styles.editingContainer}>
-          {editingButtons}
+          <View style={styles.editingLetterContainer}>
+            {editingLetters}
+          </View>
           <View style={styles.editingButtons}>
             <TouchableOpacity onPress={this.handleEditAdd}>
               <View style={styles.addButton}>
@@ -223,7 +243,7 @@ export class ResultsScreen extends Component {
                   name={Platform.OS === 'android'
                     ? 'md-add-circle'
                     : 'ios-add-circle'}
-                  size={20}
+                  size={30}
                   color='#00C183'
                 />
               </View>
@@ -234,7 +254,7 @@ export class ResultsScreen extends Component {
                   name={Platform.OS === 'android'
                     ? 'md-remove-circle'
                     : 'ios-remove-circle'}
-                  size={20}
+                  size={30}
                   color='red'
                 />
               </View>
@@ -290,22 +310,28 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   editingContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 8,
+    width: '100%'
+  },
+  editingLetterContainer: {
+    backgroundColor: '#1F5760',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingHorizontal: 1
   },
   editingLetter: {
-
+    marginTop: 4,
+    marginBottom: 4
   },
   editingButtons: {
-    flex: 1,
-    marginLeft: 4
+    marginLeft: 6
   },
   addButton: {
-    // flex: 1
   },
   removeButton: {
-    // flex: 1
   },
   editingInstructions: {
     width: '100%'
@@ -365,7 +391,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchWords: (query) => dispatch(fetchWords(query)),
+    onFetchWords: (query, selectedWords) => dispatch(fetchWords(query, selectedWords)),
     onClearWords: () => dispatch(clearWords())
   };
 };
