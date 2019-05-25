@@ -2,18 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   View,
-  FlatList,
-  TouchableOpacity,
   Platform,
   StyleSheet
 } from 'react-native';
-import MainText from '../../components/UI/MainText';
+import ResultsList from '../../components/ResultsList';
+import EditingWord from '../../components/EditingWord';
 import NavButton from '../../components/UI/NavButton';
-import TileButton from '../../components/UI/TileButton';
 import { Navigation } from 'react-native-navigation';
 import { fetchWords, clearWords } from '../../store/actions';
-import { makeId } from '../../utils/utils';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 export class ResultsScreen extends Component {
   constructor (props) {
@@ -21,7 +17,6 @@ export class ResultsScreen extends Component {
     this.state = {
       editingWord: null,
       selectedWords: [],
-      startingIndex: 0,
       foundWord: false
     };
 
@@ -58,25 +53,25 @@ export class ResultsScreen extends Component {
     });
   }
 
-  handleCycleColor (currentColor, letterIndex) {
-    let color;
-    switch (currentColor) {
+  handleCycleColor (color, index) {
+    let newColor;
+    switch (color) {
       case 'Blue':
-        color = 'Orange';
+        newColor = 'Orange';
         break;
       case 'Orange':
-        color = 'Green';
+        newColor = 'Green';
         break;
       default:
-        color = 'Blue';
+        newColor = 'Blue';
     }
     // Set new letter color
-    const letter = Object.assign({}, this.state.editingWord[letterIndex], {
-      color
+    const letter = Object.assign({}, this.state.editingWord[index], {
+      color: newColor
     });
     // Reinsert letter into `editingWord`
-    const editingWord = (letterIndex > 0)
-      ? this.state.editingWord.slice(0, letterIndex).concat(letter).concat(this.state.editingWord.slice(letterIndex + 1))
+    const editingWord = (index > 0)
+      ? this.state.editingWord.slice(0, index).concat(letter).concat(this.state.editingWord.slice(index + 1))
       : [letter].concat(this.state.editingWord.slice(1));
     // Assign updated `editingWord` to state
     this.setState({
@@ -103,7 +98,6 @@ export class ResultsScreen extends Component {
   render () {
     let navButton;
     let results;
-    let count;
     let editingContent;
 
     if (!this.state.foundWord) {
@@ -126,141 +120,20 @@ export class ResultsScreen extends Component {
       );
     }
 
-    if (this.props.loading) {
+    if (!this.state.editingWord) {
       results = (
-        <MainText>
-          Loading words...
-        </MainText>
-      );
-    } else if (this.state.editingWord) {
-      results = (
-        <View style={styles.editingInstructions}>
-          <MainText style={[
-            styles.subText,
-            styles.leftText
-          ]}>
-            1. Click the letters in the word above to set their color.
-          </MainText>
-          <MainText style={[
-            styles.subText,
-            styles.leftText
-          ]}>
-            2. Click the plus sign to add the word to your list of guesses.
-          </MainText>
-        </View>
-      );
-    } else if (this.props.words && this.props.words.length > 0) {
-      results = (
-        <FlatList
-          style={styles.flatListContainer}
-          contentContainerStyle={styles.listContainer}
-          data={this.props.words}
-          keyExtractor={() => makeId()}
-          renderItem={word => {
-            return (
-              <TouchableOpacity
-                style={[
-                  styles.listItem,
-                  Platform.OS === 'ios'
-                    ? styles.iosShadow
-                    : styles.androidShadow
-                ]}
-                onPress={() => this.handleSelectEditing(word.item)}
-              >
-                <MainText style={styles.listItemText}>
-                  {word.item}
-                </MainText>
-              </TouchableOpacity>
-            );
-          }}
+        <ResultsList
+          onResultPress={(word) => this.handleSelectEditing(word)}
         />
       );
-
-      const plural = this.props.words.length > 1 ? 's' : null;
-      count = (
-        <React.Fragment>
-          <MainText style={styles.text}>
-            <MainText style={{ color: '#FFA141' }}>
-              {this.props.words.length}
-            </MainText>
-            &nbsp;possible solution{plural}
-          </MainText>
-          <MainText style={styles.subText}>
-            <MainText style={styles.boldText}>
-              Note:
-            </MainText>
-            &nbsp;Results are sorted by the number of unique letters in each word, so words near the top are better for narrowing down the solution.
-          </MainText>
-          <MainText style={styles.text}>
-            Select a word:
-          </MainText>
-        </React.Fragment>
-      );
     } else {
-      results = (
-        <React.Fragment>
-          <MainText style={[
-            styles.text,
-            styles.centeredText
-          ]}>
-            Uh oh! No words found!
-          </MainText>
-          <MainText style={[
-            styles.text,
-            styles.centeredText
-          ]}>
-            Make sure everything is correct and try again.
-          </MainText>
-        </React.Fragment>
-      );
-    }
-
-    if (this.state.editingWord) {
-      const editingLetters = this.state.editingWord.map((letter, letterIndex) => {
-        return (
-          <TileButton
-            key={makeId()}
-            onPress={() => this.handleCycleColor(letter.color, letterIndex)}
-            style={[
-              styles.editingLetter,
-              styles[letter.color.toLowerCase()]
-            ]}
-          >
-            {letter.letter.toUpperCase()}
-          </TileButton>
-        );
-      });
-
       editingContent = (
-        <View style={styles.editingContainer}>
-          <View style={styles.editingLetterContainer}>
-            {editingLetters}
-          </View>
-          <View style={styles.editingButtons}>
-            <TouchableOpacity onPress={this.handleEditAdd}>
-              <View style={styles.addButton}>
-                <Icon
-                  name={Platform.OS === 'android'
-                    ? 'md-add-circle'
-                    : 'ios-add-circle'}
-                  size={30}
-                  color='#00C183'
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.handleEditRemove}>
-              <View style={styles.removeButton}>
-                <Icon
-                  name={Platform.OS === 'android'
-                    ? 'md-remove-circle'
-                    : 'ios-remove-circle'}
-                  size={30}
-                  color='red'
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <EditingWord
+          editingWord={this.state.editingWord}
+          onCycleColor={(color, index) => this.handleCycleColor(color, index)}
+          onEditAdd={this.handleEditAdd}
+          onEditRemove={this.handleEditRemove}
+        />
       );
     }
 
@@ -268,7 +141,6 @@ export class ResultsScreen extends Component {
       <View style={styles.container}>
         {navButton}
         {editingContent}
-        {count}
         {results}
       </View>
     );
@@ -283,109 +155,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 20,
     marginTop: Platform.OS === 'ios' ? 20 : 0
-  },
-  flatListContainer: {
-    backgroundColor: '#5F5B71',
-    width: '100%'
-  },
-  listContainer: {
-    alignItems: 'center',
-    padding: 8,
-    width: '100%'
-  },
-  listItem: {
-    backgroundColor: '#58BBC9',
-    borderColor: 'white',
-    borderRadius: 4,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginBottom: 8,
-    width: '75%'
-  },
-  listItemText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  editingContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 8,
-    width: '100%'
-  },
-  editingLetterContainer: {
-    backgroundColor: '#1F5760',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingHorizontal: 1
-  },
-  editingLetter: {
-    marginTop: 4,
-    marginBottom: 4
-  },
-  editingButtons: {
-    marginLeft: 6
-  },
-  addButton: {
-  },
-  removeButton: {
-  },
-  editingInstructions: {
-    width: '100%'
-  },
-  text: {
-    fontSize: 24,
-    marginBottom: 4
-  },
-  subText: {
-    fontSize: 14,
-    fontStyle: 'italic',
-    marginBottom: 4
-  },
-  boldText: {
-    fontWeight: 'bold'
-  },
-  centeredText: {
-    marginVertical: 8,
-    textAlign: 'center'
-  },
-  leftText: {
-    textAlign: 'left'
-  },
-  iosShadow: {
-    shadowColor: 'rgb(40, 40, 40)',
-    shadowOffset: {
-      width: 1,
-      height: 1
-    },
-    shadowOpacity: 1,
-    shadowRadius: 1
-  },
-  androidShadow: {
-    elevation: 6
-  },
-  pink: {
-    backgroundColor: '#F96E88'
-  },
-  blue: {
-    backgroundColor: '#58BBC9'
-  },
-  orange: {
-    backgroundColor: '#FFA141'
-  },
-  green: {
-    backgroundColor: '#00C183'
   }
 });
 
 const mapStateToProps = state => {
   return {
-    loading: state.words.loading,
-    query: state.words.query,
-    words: state.words.words
+    query: state.words.query
   };
 };
 
