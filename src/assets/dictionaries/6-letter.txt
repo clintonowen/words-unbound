@@ -1901,7 +1901,6 @@ corpus
 corral
 corset
 cortex
-corymb
 cosied
 cosier
 cosies
