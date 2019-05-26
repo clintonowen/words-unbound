@@ -2927,7 +2927,6 @@ enynes
 enzone
 enzyme
 eolian
-eomyid
 eosine
 eparch
 epilog

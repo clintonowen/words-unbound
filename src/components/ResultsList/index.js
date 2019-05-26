@@ -10,6 +10,53 @@ import MainText from '../UI/MainText';
 import { makeId } from '../../utils/utils';
 
 export class ResultsList extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      wordList: [],
+      offset: 0
+    };
+
+    this.handleLoadMore = this.handleLoadMore.bind(this);
+  }
+
+  componentDidMount () {
+    this.handleLoadMore();
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.words !== this.props.words) {
+      this.handleLoadMore();
+    }
+  }
+
+  handleResultsPress (word) {
+    this.setState({
+      wordList: [],
+      offset: 0
+    });
+    this.props.onResultPress(word);
+  }
+
+  handleLoadMore () {
+    if (this.state.offset + 29 > this.props.words.length) {
+      this.setState({
+        wordList: [
+          ...this.state.wordList,
+          ...this.props.words.slice(this.state.offset)
+        ]
+      });
+    } else {
+      this.setState({
+        wordList: [
+          ...this.state.wordList,
+          ...this.props.words.slice(this.state.offset, this.state.offset + 29)
+        ],
+        offset: this.state.offset + 30
+      });
+    }
+  }
+
   render () {
     let results;
 
@@ -41,8 +88,10 @@ export class ResultsList extends Component {
           <FlatList
             style={styles.flatListContainer}
             contentContainerStyle={styles.listContainer}
-            data={this.props.words}
+            data={this.state.wordList}
             keyExtractor={() => makeId()}
+            initialNumToRender={15}
+            viewabilityConfig={{ waitForInteraction: false }}
             renderItem={word => {
               return (
                 <TouchableOpacity
@@ -52,10 +101,27 @@ export class ResultsList extends Component {
                       ? styles.iosShadow
                       : styles.androidShadow
                   ]}
-                  onPress={() => this.props.onResultPress(word.item)}
+                  onPress={() => this.handleResultsPress(word.item)}
                 >
                   <MainText style={styles.listItemText}>
                     {word.item}
+                  </MainText>
+                </TouchableOpacity>
+              );
+            }}
+            ListFooterComponent={() => {
+              return (
+                <TouchableOpacity
+                  style={[
+                    styles.listFooter,
+                    Platform.OS === 'ios'
+                      ? styles.iosShadow
+                      : styles.androidShadow
+                  ]}
+                  onPress={this.handleLoadMore}
+                >
+                  <MainText style={styles.listItemText}>
+                    Load More
                   </MainText>
                 </TouchableOpacity>
               );
@@ -111,6 +177,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center'
+  },
+  listFooter: {
+    backgroundColor: '#00C183',
+    borderColor: 'white',
+    borderRadius: 4,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginTop: 8,
+    width: '75%'
   },
   text: {
     fontSize: 24,
