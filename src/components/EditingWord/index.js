@@ -11,7 +11,11 @@ import { makeId } from '../../utils/utils';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const editingWord = props => {
+  let found = true;
   const editingLetters = props.editingWord.map((letter, index) => {
+    if (letter.color !== 'Green') {
+      found = false;
+    }
     return (
       <TileButton
         key={makeId()}
@@ -33,7 +37,7 @@ const editingWord = props => {
           {editingLetters}
         </View>
         <View style={styles.editingButtons}>
-          <TouchableOpacity onPress={props.onEditAdd}>
+          <TouchableOpacity onPress={() => props.onAddEdit(found)}>
             <View>
               <Icon
                 name={Platform.OS === 'android'
@@ -44,7 +48,7 @@ const editingWord = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={props.onEditRemove}>
+          <TouchableOpacity onPress={props.onRemoveEdit}>
             <View>
               <Icon
                 name={Platform.OS === 'android'
@@ -80,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 8,
+    marginVertical: 20,
     width: '100%'
   },
   editingLetterContainer: {

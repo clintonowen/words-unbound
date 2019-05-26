@@ -11,14 +11,10 @@ import { makeId } from '../../utils/utils';
 
 const selectedWords = props => {
   let selected = props.selectedWords.map((wordArray, wordIndex) => {
-    let found = true;
     let remove = null;
     let lastWord = false;
 
     const letters = wordArray.map((letter, letterIndex) => {
-      if (letter.color !== 'Green') {
-        found = false;
-      }
       return (
         <View
           style={[
@@ -34,10 +30,6 @@ const selectedWords = props => {
         </View>
       );
     });
-
-    if (found) {
-      props.onWordFound();
-    }
 
     if (wordIndex === props.selectedWords.length - 1) {
       lastWord = true;
@@ -82,7 +74,7 @@ const selectedWords = props => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginBottom: 10,
+    marginVertical: 10,
     width: '100%'
   },
   selectedContainer: {

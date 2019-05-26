@@ -842,7 +842,6 @@ betime
 betoil
 betoss
 betray
-betrim
 better
 bevels
 bevies

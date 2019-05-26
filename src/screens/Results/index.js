@@ -19,14 +19,12 @@ export class ResultsScreen extends Component {
     this.state = {
       editingWord: null,
       selectedWords: [],
-      foundWord: false
+      wordFound: false
     };
 
     this.onNavBack = this.onNavBack.bind(this);
     this.onRestart = this.onRestart.bind(this);
-    this.handleWordFound = this.handleWordFound.bind(this);
     this.handleRemoveSelected = this.handleRemoveSelected.bind(this);
-    this.handleAddEdit = this.handleAddEdit.bind(this);
     this.handleRemoveEdit = this.handleRemoveEdit.bind(this);
   }
 
@@ -35,20 +33,16 @@ export class ResultsScreen extends Component {
   }
 
   onRestart () {
+    this.props.onClearWords();
     Navigation.popToRoot(this.props.componentId);
-  }
-
-  handleWordFound () {
-    this.setState({
-      foundWord: true
-    });
   }
 
   handleRemoveSelected () {
     let selectedWords = this.state.selectedWords.slice(0, -1);
     this.setState({
       editingWord: null,
-      selectedWords
+      selectedWords,
+      wordFound: false
     });
     // Fetch an updated list of words
     this.props.onFetchWords(this.props.query, selectedWords);
@@ -99,11 +93,12 @@ export class ResultsScreen extends Component {
     });
   }
 
-  handleAddEdit () {
+  handleAddEdit (wordFound) {
     const selectedWords = [...this.state.selectedWords, this.state.editingWord];
     this.setState({
       editingWord: null,
-      selectedWords
+      selectedWords,
+      wordFound
     });
     // Fetch an updated list of words
     this.props.onFetchWords(this.props.query, selectedWords);
@@ -121,7 +116,7 @@ export class ResultsScreen extends Component {
     let results;
     let editingContent;
 
-    if (!this.state.foundWord) {
+    if (!this.state.wordFound) {
       navButton = (
         <NavButton
           color='#F96E88'
@@ -145,19 +140,18 @@ export class ResultsScreen extends Component {
       selectedWords = (
         <SelectedWords
           selectedWords={this.state.selectedWords}
-          onWordFound={this.handleWordFound}
           onRemoveSelected={this.handleRemoveSelected}
         />
       );
     }
 
-    if (this.state.foundWord) {
+    if (this.state.wordFound) {
       results = (
         <React.Fragment>
-          <MainText>
+          <MainText style={styles.textLg}>
             CONGRATULATIONS!
           </MainText>
-          <MainText>
+          <MainText style={styles.textMd}>
             You found the correct word!
           </MainText>
         </React.Fragment>
@@ -173,8 +167,8 @@ export class ResultsScreen extends Component {
         <EditingWord
           editingWord={this.state.editingWord}
           onCycleColor={(color, index) => this.handleCycleColor(color, index)}
-          onEditAdd={this.handleAddEdit}
-          onEditRemove={this.handleRemoveEdit}
+          onAddEdit={(wordFound) => this.handleAddEdit(wordFound)}
+          onRemoveEdit={this.handleRemoveEdit}
         />
       );
     }
@@ -198,6 +192,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 20,
     marginTop: Platform.OS === 'ios' ? 20 : 0
+  },
+  textLg: {
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  textMd: {
+    fontSize: 20
   }
 });
 
