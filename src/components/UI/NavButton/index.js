@@ -58,9 +58,7 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#AAA',
-    borderColor: '#AAA',
-    elevation: 0,
-    shadowOpacity: 0
+    borderColor: '#AAA'
   },
   iosShadow: {
     shadowColor: 'rgb(40, 40, 40)',

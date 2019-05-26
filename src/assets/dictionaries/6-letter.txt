@@ -842,7 +842,6 @@ betime
 betoil
 betoss
 betray
-betrim
 better
 bevels
 bevies
@@ -2928,7 +2927,6 @@ enynes
 enzone
 enzyme
 eolian
-eomyid
 eosine
 eparch
 epilog

@@ -638,7 +638,6 @@ apteria
 apteryx
 apthous
 aptness
-aptonym
 aquatic
 aquavit
 aqueous
@@ -670,7 +669,6 @@ arcwise
 ardours
 arduous
 arenite
-arenium
 areolae
 areolar
 areolas
@@ -2663,7 +2661,6 @@ cinched
 cinches
 cinders
 cinemas
-cingula
 ciphers
 circled
 circler
@@ -4551,7 +4548,6 @@ dumpier
 dumping
 dungeon
 dunging
-dunites
 dunking
 dunnock
 duopods
