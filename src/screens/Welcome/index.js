@@ -58,6 +58,7 @@ export class WelcomeScreen extends Component {
       }
       return tile;
     });
+
     return (
       <View style={[
         styles.container,
