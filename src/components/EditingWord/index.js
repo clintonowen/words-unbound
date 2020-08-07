@@ -66,13 +66,19 @@ const editingWord = props => {
           styles.subText,
           styles.leftText
         ]}>
-          1. Click the letters in the word above to set their color.
+          1. Enter the word into your game and note the color of each letter.
         </MainText>
         <MainText style={[
           styles.subText,
           styles.leftText
         ]}>
-          2. Click the plus sign to add the word to your list of guesses.
+          2. Click the letters in the word above to set their color.
+        </MainText>
+        <MainText style={[
+          styles.subText,
+          styles.leftText
+        ]}>
+          3. Click the plus sign to add the word to your list of guesses.
         </MainText>
       </View>
     </React.Fragment>

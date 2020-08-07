@@ -8,6 +8,8 @@ import {
 import MainText from '../../components/UI/MainText';
 import NavButton from '../../components/UI/NavButton';
 
+import { makeId } from '../../utils/utils';
+
 import { Navigation } from 'react-native-navigation';
 import { WORDS_FORM_SCREEN } from '../../navigation/Screens';
 
@@ -32,6 +34,31 @@ export class WelcomeScreen extends Component {
   }
 
   render () {
+    const colors = ['orange', 'green', 'pink', 'blue'];
+    let colorIndex = 0;
+    const unbound = ['U', 'N', 'B', 'O', 'U', 'N', 'D'].map((letter, index) => {
+      const tile = (
+        <View
+          key={makeId()}
+          style={[
+            styles.tile,
+            styles[colors[colorIndex]],
+            Platform.OS === 'ios'
+              ? styles.iosShadow
+              : styles.androidShadow
+          ]}
+        >
+          <MainText style={styles.tileText}>{letter}</MainText>
+        </View>
+      );
+      if (colorIndex < colors.length - 1) {
+        colorIndex++;
+      } else {
+        colorIndex = 0;
+      }
+      return tile;
+    });
+
     return (
       <View style={[
         styles.container,
@@ -44,69 +71,7 @@ export class WelcomeScreen extends Component {
           WORDS
         </MainText>
         <View style={styles.tileContainer}>
-          <View style={[
-            styles.tile,
-            styles.orange,
-            Platform.OS === 'ios'
-              ? styles.iosShadow
-              : styles.androidShadow
-          ]}>
-            <MainText style={styles.tileText}>U</MainText>
-          </View>
-          <View style={[
-            styles.tile,
-            styles.green,
-            Platform.OS === 'ios'
-              ? styles.iosShadow
-              : styles.androidShadow
-          ]}>
-            <MainText style={styles.tileText}>N</MainText>
-          </View>
-          <View style={[
-            styles.tile,
-            styles.pink,
-            Platform.OS === 'ios'
-              ? styles.iosShadow
-              : styles.androidShadow
-          ]}>
-            <MainText style={styles.tileText}>B</MainText>
-          </View>
-          <View style={[
-            styles.tile,
-            styles.blue,
-            Platform.OS === 'ios'
-              ? styles.iosShadow
-              : styles.androidShadow
-          ]}>
-            <MainText style={styles.tileText}>O</MainText>
-          </View>
-          <View style={[
-            styles.tile,
-            styles.orange,
-            Platform.OS === 'ios'
-              ? styles.iosShadow
-              : styles.androidShadow
-          ]}>
-            <MainText style={styles.tileText}>U</MainText>
-          </View>
-          <View style={[
-            styles.tile,
-            styles.green,
-            Platform.OS === 'ios'
-              ? styles.iosShadow
-              : styles.androidShadow
-          ]}>
-            <MainText style={styles.tileText}>N</MainText>
-          </View>
-          <View style={[
-            styles.tile,
-            styles.pink,
-            Platform.OS === 'ios'
-              ? styles.iosShadow
-              : styles.androidShadow
-          ]}>
-            <MainText style={styles.tileText}>D</MainText>
-          </View>
+          {unbound}
         </View>
         <NavButton
           color='#00C183'

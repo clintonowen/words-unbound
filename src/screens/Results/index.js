@@ -175,10 +175,10 @@ export class ResultsScreen extends Component {
 
     return (
       <View style={styles.container}>
-        {navButton}
         {selectedWords}
         {editingContent}
         {results}
+        {navButton}
       </View>
     );
   }
@@ -198,7 +198,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   textMd: {
-    fontSize: 20
+    fontSize: 20,
+    marginBottom: 10
   }
 });
 

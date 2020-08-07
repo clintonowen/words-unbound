@@ -5,12 +5,12 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "ios": "react-native run-ios --simulator='iPhone SE'",
+    "ios": "react-native run-ios --simulator='iPhone 8'",
     "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug"
   },
   "dependencies": {
-    "react": "16.8.3",
-    "react-native": "0.59.8",
+    "react": "^16.8.3",
+    "react-native": "^0.63.2",
     "react-native-local-resource": "^0.1.6",
     "react-native-navigation": "^2.19.1",
     "react-native-vector-icons": "^6.4.2",
@@ -21,8 +21,8 @@
   "devDependencies": {
     "@babel/core": "7.4.4",
     "@babel/runtime": "7.4.4",
-    "babel-jest": "24.8.0",
-    "jest": "24.8.0",
+    "babel-jest": "^26.2.2",
+    "jest": "^26.2.2",
     "metro-react-native-babel-preset": "0.54.1",
     "react-test-renderer": "16.8.3"
   },
